@@ -19,8 +19,10 @@
   <div id="map"></div>
 
   <!-- VWorld 3D 지도 SDK -->
-  <script src="https://map.vworld.kr/js/apis.do?type=3d&apiKey=5FFE87C6-6704-3686-BC9E-C315D75F178E"></script>
-  <script>
+<script
+  src="https://map.vworld.kr/js/webglMapInit.js.do?version=3.0&apiKey=5FFE87C6-6704-3686-BC9E-C315D75F178E&domain=intheaisles.github.io">
+</script>
+
     // 브이월드 3D 지도 초기화
     vw.ol3.MapOptions = {
       basemapType: vw.ol3.BasemapType.GRAPHIC, // 기본 배경지도 (그래픽형)
