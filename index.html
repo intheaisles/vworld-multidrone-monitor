@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>VWorld Multi-Drone Monitor</title>
   <style>
-    html, body { height: 100%; margin: 0; font-family: system-ui, sans-serif; }
+    html, body { height: 100%; margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
     header { padding: 12px 16px; border-bottom: 1px solid #e5e7eb; }
-    #map { width: 100%; height: calc(100% - 57px); }
+    /* 헤더 높이(약 57px)를 제외한 영역 전체를 지도에 할당 */
+    #vmap { width: 100%; height: calc(100% - 57px); }
   </style>
 </head>
 <body>
@@ -15,30 +16,37 @@
     <h1 style="margin:0">VWorld Multi-Drone Monitor</h1>
   </header>
 
-  <!-- 지도 영역 -->
-  <div id="map"></div>
+  <!-- 지도 컨테이너 -->
+  <div id="vmap"></div>
 
-  <!-- VWorld 3D 지도 SDK -->
-  <script type="text/javascript" src="https://map.vworld.kr/js/webglMapInit.js.do?version=3.0&apiKey= 5FFE87C6-6704-3686-BC9E-C315D75F178E
-&domain=intheaisles.github.io"></script>
+  <!-- VWorld 3D SDK (apiKey와 domain은 반드시 정확히 입력) -->
+  <script
+    type="text/javascript"
+    src="https://map.vworld.kr/js/webglMapInit.js.do?version=3.0&apiKey=5FFE87C6-6704-3686-BC9E-C315D75F178E&domain=intheaisles.github.io">
+  </script>
 
-<script
-  src="https://map.vworld.kr/js/webglMapInit.js.do?version=3.0&apiKey=5FFE87C6-6704-3686-BC9E-C315D75F178E&domain=https://intheaisles.github.io/vworld-multidrone-monitor/">
-</script>
+  <script>
+    function initVWorld3D() {
+      var options = {
+        mapId: "vmap",
+        // 초기 카메라: (경도, 위도, 고도[m]), 방향(heading, pitch, roll)
+        initPosition: new vw.CameraPosition(
+          new vw.CoordZ(127.425, 36.300, 1500000),
+          new vw.Direction(0, -60, 0)
+        ),
+        logo: true,
+        navigation: true
+      };
 
-    // 브이월드 3D 지도 초기화
-    vw.ol3.MapOptions = {
-      basemapType: vw.ol3.BasemapType.GRAPHIC, // 기본 배경지도 (그래픽형)
-      controlDensity: vw.ol3.DensityType.FULL,
-      interactionDensity: vw.ol3.DensityType.FULL,
-      tileMode: vw.ol3.TileMode.RASTER,
-      initPosition: vw.ol3.CameraPosition,
-      mapAutoControl: false
-    };
+      var map = new vw.Map();
+      map.setOption(options);
+      map.start();
+      // 필요시 다른 스크립트에서 접근할 수 있도록 전역에 보관
+      window.vmap = map;
+    }
 
-    // 지도 생성
-    var map = new vw.ol3.Map("map", vw.ol3.MapOptions);
-    map.setCenterAndZoom(new vw.Coord(127.5, 36.3), 7); // 한반도 중심
+    // DOM 준비 후 초기화
+    window.addEventListener('DOMContentLoaded', initVWorld3D);
   </script>
 </body>
 </html>
